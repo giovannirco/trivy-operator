@@ -231,6 +231,7 @@ func buildMetricDescriptors(config trivyoperator.ConfigData) metricDescriptors {
 		package_type,
 		class,
 		vuln_id,
+		vuln_vector,
 		vuln_title,
 		vuln_score,
 	}
