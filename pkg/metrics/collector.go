@@ -464,7 +464,7 @@ func (c ResourcesMetricsCollector) collectVulnerabilityIdReports(ctx context.Con
 				vulnLabelValues[7] = r.Report.Artifact.Tag
 				vulnLabelValues[8] = r.Report.Artifact.Digest
 				for i, label := range c.GetReportResourceLabels() {
-					vulnLabelValues[i+18] = r.Labels[label]
+					vulnLabelValues[i+19] = r.Labels[label]
 				}
 				var vulnList = make(map[string]bool)
 				for _, vuln := range r.Report.Vulnerabilities {
@@ -479,10 +479,14 @@ func (c ResourcesMetricsCollector) collectVulnerabilityIdReports(ctx context.Con
 					vulnLabelValues[13] = vuln.PackageType
 					vulnLabelValues[14] = vuln.Class
 					vulnLabelValues[15] = vuln.VulnerabilityID
-					vulnLabelValues[16] = vuln.Title
-					vulnLabelValues[17] = ""
+					vulnLabelValues[16] = ""
+					if vuln.CVSS != nil {
+						vulnLabelValues[16] = vuln.CVSS.V3Vector
+					}
+					vulnLabelValues[17] = vuln.Title
+					vulnLabelValues[18] = ""
 					if vuln.Score != nil {
-						vulnLabelValues[17] = strconv.FormatFloat(*vuln.Score, 'f', -1, 64)
+						vulnLabelValues[18] = strconv.FormatFloat(*vuln.Score, 'f', -1, 64)
 					}
 					metrics <- prometheus.MustNewConstMetric(c.vulnIdDesc, prometheus.GaugeValue, float64(1), vulnLabelValues...)
 				}
